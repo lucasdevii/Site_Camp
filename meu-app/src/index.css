@@ -1,0 +1,28 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+* {
+  background-color: #1d1a16;
+  margin: 0;
+  padding: 0;
+  color: white;
+  font-family: "Noto Serif", serif;
+}
+/* CSS padrão para navegadores baseados em WebKit */
+::-webkit-scrollbar {
+  width: 8px; /* largura da barra lateral */
+  height: 8px; /* altura da barra inferior (horizontal) */
+}
+
+::-webkit-scrollbar-track {
+  background: #1e1e1e; /* trilho da barra */
+}
+
+::-webkit-scrollbar-thumb {
+  background: #927b64; /* parte que se move */
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #a98c70;
+}

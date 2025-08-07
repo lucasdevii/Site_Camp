@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "target": "ES2020", // Versão do JS gerado
+    "module": "CommonJS", // Tipo de módulo usado pelo Node
+    "rootDir": "src", // Onde estão os arquivos .ts
+    "outDir": "dist", // Pasta de saída (se compilar)
+    "esModuleInterop": true, // Permite importar módulos padrão
+    "strict": true, // Ativa verificações mais rígidas
+    "moduleResolution": "node", // Resolve módulos como o Node faz
+    "resolveJsonModule": true, // Permite importar arquivos .json
+    "skipLibCheck": true // Ignora checagem de tipos em libs
+  },
+  "include": ["src"], // Inclui a pasta src
+  "exclude": ["node_modules", "dist"] // Exclui essas pastas
+}
