@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import type { ReactNode } from "react";
-import { LoginContext } from "./context_login"; //
+import { LoginContext } from "./context_login"; // Certifique-se de que a interface foi atualizada
 
 interface LoginProviderProps {
   children: ReactNode;
@@ -9,7 +9,8 @@ interface LoginProviderProps {
 
 export const LoginProvider = ({ children }: LoginProviderProps) => {
   const [isLogged, setIsLogged] = useState<boolean>(false);
-  const [nameUser, setNameUser] = useState<string | null>(null);
+  const [nameUser, setNameUser] = useState<string>("");
+  const [description, setDescription] = useState<string>("");
 
   useEffect(() => {
     axios
@@ -22,16 +23,18 @@ export const LoginProvider = ({ children }: LoginProviderProps) => {
       )
       .then((res) => {
         setIsLogged(!!res.data?.success);
-        setNameUser(res.data?.name);
+        setNameUser(res.data?.name || "");
+        setDescription(res.data?.description || "");
       })
       .catch(() => {
         setIsLogged(false);
-        setNameUser(null);
+        setNameUser("");
+        setDescription("");
       });
   }, []);
 
   return (
-    <LoginContext.Provider value={{ nameUser: nameUser, isLogged: isLogged }}>
+    <LoginContext.Provider value={{ nameUser, description, isLogged }}>
       {children}
     </LoginContext.Provider>
   );

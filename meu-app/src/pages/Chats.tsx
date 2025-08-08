@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import SideBar from "../components/sideBar";
+import SideBar from "../components/sideContacts";
 
 function Chats() {
   type Friends = {

@@ -1,7 +1,8 @@
 import { createContext } from "react";
 
 export interface LoginContextType {
-  nameUser: string | null;
+  nameUser: string;
+  description: string;
   isLogged: boolean;
 }
 
