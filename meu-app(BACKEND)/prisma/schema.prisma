@@ -27,6 +27,13 @@ model Friends {
   status         FriendshipStatus @default(PENDING)
   createdAt      DateTime         @default(now())
 }
+model Chats {
+  id             Int              @id @default(autoincrement())
+  conversation   String 
+  idFirstPlayer  Int   
+  idSecondPlayer Int  
+  createdAt      DateTime         @default(now())
+}
 
 enum FriendshipStatus {
   PENDING
