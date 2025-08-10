@@ -15,7 +15,7 @@ type ContextsType = {
 function SideBar({ setOpenSideBar }: SideBarProps) {
   const navigate = useNavigate();
   const { nameUser, description }: ContextsType = useContext(LoginContext)!; //cuidado tbm, ficar undefined provavelmente traria problemas;
-  const [modalIsTrue, setModalIsTrue] = useState(false);
+  const [modalIsTrue, setModalIsTrue] = useState<boolean>(false);
   return (
     <aside className="rounded-l-2xl px-1 mx-1.5 py-2">
       <div className="flex items-center justify-between">
@@ -117,7 +117,7 @@ function SideBar({ setOpenSideBar }: SideBarProps) {
           <span className="font-serif bg-transparent">Deslogar</span>
         </div>
       </div>
-      {modalIsTrue && <ModalLogout />}
+      {modalIsTrue && <ModalLogout setModalIsTrue={setModalIsTrue} />}
     </aside>
   );
 }

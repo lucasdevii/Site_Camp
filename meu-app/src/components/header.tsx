@@ -93,6 +93,7 @@ function Header() {
         className={`z-30 fixed top-0 right-0 h-full w-80 duration-300 px-2 py-2 border-l border-stone-700 rounded-l-xl ${
           isClicked ? "translate-x-0" : "translate-x-full"
         }`}
+        
       >
         {isClicked && <SideBar setOpenSideBar={setOpenSideBar} />}
       </div>
