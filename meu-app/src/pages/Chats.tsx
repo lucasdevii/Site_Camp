@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import SideBar from "../components/sideContacts";
+import axios from "axios";
 
 function Chats() {
   type Friends = {
@@ -11,6 +12,17 @@ function Chats() {
   const [friendsList, setFriendsList] = useState<Friends[]>([]);
   const [isClickedChat, setClickedChat] = useState<boolean>(false);
   const [nameChat, setNameChat] = useState<string | null>(null);
+
+  async function ListFriends() {
+    axios
+      .get("/List-Friends")
+      .then((res) => {
+        setFriendsList(res.data.list);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
 
   useEffect(() => {
     setFriendsList([

@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 type UserData = {
   password: string;
@@ -8,6 +8,8 @@ type UserData = {
 };
 
 function Login() {
+  const navigate = useNavigate();
+
   const [emailUser, setEmailUser] = useState<string>("");
   const [passwordUser, setPasswordUser] = useState<string>("");
   const [paragrafEmail, setParagrafEmail] = useState<string>("");
@@ -26,11 +28,16 @@ function Login() {
       emailUser.length >= 6 &&
       isEmailFormatValid &&
       isDomainAllowed;
-    if (isEmailValid) {
+    if (!isEmailValid) {
       setParagrafEmail("Email digitado esta inválido");
+    } else {
+      setParagrafEmail("");
     }
-    if (isPasswordValid) {
+
+    if (!isPasswordValid) {
       setParagrafPassword("Senha digitada esta inválida");
+    } else {
+      setParagrafPassword("");
     }
 
     if (isPasswordValid && isEmailValid) {
@@ -38,15 +45,34 @@ function Login() {
         password: passwordUser,
         email: emailUser,
       };
-      await axios.post(
-        "http://localhost:4001/SignUp",
-        { object: objUsers },
-        {
+      await axios
+        .post("http://localhost:4001/Login", objUsers, {
           withCredentials: true,
-        }
-      );
-    } else {
-      alert("Dados inválidos. Verifique os campos.");
+        })
+        .then((res) => {
+          const response = res.data.success;
+          if (response) {
+            navigate("/Home");
+          } else {
+            setParagrafPassword("Email ou senha inválidos");
+          }
+        })
+        .catch((error) => {
+          if (error.response) {
+            const status = error.response.status;
+            if (status === 400) {
+              setParagrafPassword(error.response.data.message);
+            } else if (status === 500) {
+              setParagrafPassword(
+                "Erro interno do servidor. Tente mais tarde."
+              );
+            } else {
+              setParagrafPassword("Erro desconhecido.");
+            }
+          } else {
+            setParagrafPassword("Erro de conexão.");
+          }
+        });
     }
   }
 
@@ -61,19 +87,21 @@ function Login() {
             <p className="text-xl">Email</p>
             <input
               type="text"
-              className="bg-[#3e362e] w-96 rounded-lg text-black h-9"
+              value={emailUser}
+              className="bg-[#3e362e] w-96 p-1 rounded-lg text-white h-9 mb-1"
               onChange={(e) => setEmailUser(e.target.value)}
             />
-            <p>{paragrafEmail}</p>
+            <p className="text-sm">{paragrafEmail}</p>
           </div>
           <div className="flex flex-col">
             <p className="text-xl">Password</p>
             <input
               type="text"
-              className="bg-[#3e362e] w-96 rounded-lg text-black h-9"
+              value={passwordUser}
+              className="bg-[#3e362e] w-96 p-1 rounded-lg text-white h-9 mb-1"
               onChange={(e) => setPasswordUser(e.target.value)}
             />
-            <p>{paragrafPassword}</p>
+            <p className="text-sm">{paragrafPassword}</p>
             <Link to={""} className="underline text-sm my-1 text-[#b69b80]">
               esqueci minha senha
             </Link>

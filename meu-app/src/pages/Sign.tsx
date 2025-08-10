@@ -1,7 +1,10 @@
 import axios from "axios";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function Sign() {
+  const navigate = useNavigate();
+
   type UserData = {
     name: string;
     password: string;
@@ -53,14 +56,22 @@ function Sign() {
         email: emailUser,
       };
 
-      const response = axios.post(
-        "http://localhost:4001/SignUp",
-        { object: objUsers },
-        {
+      axios
+        .post("http://localhost:4001/SignUp", objUsers, {
           withCredentials: true,
-        }
-      );
-      console.log(response);
+        })
+        .then((res) => {
+          const response = res.data.success;
+          console.log(response);
+          if (response) {
+            navigate("/Home");
+          } else {
+            setEmailUser("");
+            setNameUser("");
+            setPasswordUser("");
+          }
+        })
+        .catch((error) => console.log(error));
     }
   }
 

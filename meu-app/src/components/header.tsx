@@ -19,7 +19,7 @@ function Header() {
             Mystic Realms
           </Link>
         </div>
-        {!isLogged && !nameUser ? (
+        {isLogged && nameUser ? (
           <div className="flex space-x-5">
             {/* Links para usuários não logados */}
             <div className="flex items-center space-x-2 cursor-pointer hover:scale-105 transition-transform whitespace-nowrap">
@@ -89,7 +89,11 @@ function Header() {
       </header>
 
       {/* Sidebar que aparece quando isClicked for true */}
-      <div className="z-50">
+      <div
+        className={`z-50 fixed top-0 right-0 h-full w-80 duration-300 px-2 py-2 border-l border-stone-700 rounded-l-xl ${
+          isClicked ? "translate-x-0" : "translate-x-full"
+        }`}
+      >
         {isClicked && <SideBar setOpenSideBar={setOpenSideBar} />}
       </div>
 

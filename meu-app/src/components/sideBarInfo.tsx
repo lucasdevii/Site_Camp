@@ -11,21 +11,28 @@ type ContextsType = {
 };
 
 function SideBar({ setOpenSideBar }: SideBarProps) {
-  const { nameUser, description, isLogged }: ContextsType =
-    useContext(LoginContext)!; //cuidado tbm, ficar undefined provavelmente traria problemas;
+  const { nameUser, isLogged }: ContextsType = useContext(LoginContext)!; //cuidado tbm, ficar undefined provavelmente traria problemas;
 
   return (
-    <div className="h-screen fixed">
-      <div onClick={() => setOpenSideBar(false)}>
-        <img src="return-svgrepo-com.svg" alt="Return" />
+    <div className="rounded-l-2xl px-2">
+      <div className="flex items-center justify-between">
+        <div>
+          <div className="w-8">
+            <img
+              src="circle-person-profile-user-group-people-svgrepo-com.svg"
+              alt=""
+            />
+          </div>
+          <div className="">
+            <p>{`${nameUser}`}</p>
+            <p>{`${isLogged}`}</p>
+          </div>
+        </div>
+        <div className="" onClick={() => setOpenSideBar(false)}>
+          <p className="text-sm text-red-600 cursor-pointer">X</p>
+        </div>
       </div>
-      <div>
-        <p>
-          `name: ${nameUser}
-          isLogged: ${isLogged}
-          descrição: ${description}`
-        </p>
-      </div>
+      <div></div>
     </div>
   );
 }

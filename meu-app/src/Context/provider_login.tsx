@@ -22,9 +22,9 @@ export const LoginProvider = ({ children }: LoginProviderProps) => {
         }
       )
       .then((res) => {
-        setIsLogged(!!res.data?.success);
-        setNameUser(res.data?.name || "");
-        setDescription(res.data?.description || "");
+        setIsLogged(!!res.data.success);
+        setNameUser(res.data.name || "");
+        setDescription(res.data.description || "");
       })
       .catch(() => {
         setIsLogged(false);
