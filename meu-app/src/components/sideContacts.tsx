@@ -2,7 +2,6 @@ import { useState } from "react";
 
 import ModalFriendsNew from "./modalFriendsNew";
 import UrlCreate from "./URLChangeForString/URLChangeForString";
-import PersonSVG from "../../public/person_logo";
 
 type Friends = {
   id: number;
@@ -50,7 +49,10 @@ function SideBar({ friendsList, setClickedChat, setNameChat }: SideBarProp) {
                   </div>
                 ) : (
                   <div className="flex bg-transparent">
-                    <PersonSVG />
+                    <img
+                      src="./circle-person-profile-user-group-people-svgrepo-com.svg"
+                      alt=""
+                    />
                   </div>
                 )}
               </div>

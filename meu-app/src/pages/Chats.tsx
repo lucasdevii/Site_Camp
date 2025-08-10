@@ -13,16 +13,7 @@ function Chats() {
   const [isClickedChat, setClickedChat] = useState<boolean>(false);
   const [nameChat, setNameChat] = useState<string | null>(null);
 
-  async function ListFriends() {
-    axios
-      .get("/List-Friends")
-      .then((res) => {
-        setFriendsList(res.data.list);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }
+  //async function ListFriends() {}
 
   useEffect(() => {
     setFriendsList([

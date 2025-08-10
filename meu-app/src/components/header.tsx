@@ -13,7 +13,7 @@ function Header() {
 
   return (
     <>
-      <header className="fixed w-full h-12 z-40 flex items-center justify-between px-6 py-4 text-white border-b border-stone-700 duration-200">
+      <header className="fixed w-full h-12 z-20 flex items-center justify-between px-6 py-4 text-white border-b border-stone-700 duration-200">
         <div className="flex items-center cursor-pointer">
           <Link to={"/Home"} className="text-sm">
             Mystic Realms
@@ -43,7 +43,7 @@ function Header() {
             >
               <img
                 className="h-7 w-7"
-                src="../../public/circle-person-profile-user-group-people-svgrepo-com.svg"
+                src="../../public/circle-person-profile.svg"
                 alt=""
               />
             </div>
@@ -90,7 +90,7 @@ function Header() {
 
       {/* Sidebar que aparece quando isClicked for true */}
       <div
-        className={`z-50 fixed top-0 right-0 h-full w-80 duration-300 px-2 py-2 border-l border-stone-700 rounded-l-xl ${
+        className={`z-30 fixed top-0 right-0 h-full w-80 duration-300 px-2 py-2 border-l border-stone-700 rounded-l-xl ${
           isClicked ? "translate-x-0" : "translate-x-full"
         }`}
       >
