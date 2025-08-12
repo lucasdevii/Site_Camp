@@ -1,14 +1,19 @@
 import axios from "axios";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { LoginContext } from "../Context/context_login";
 
 type UserData = {
   password: string;
   email: string;
 };
+interface isLoggedContext {
+  setIsLogged: (value: boolean) => void;
+}
 
 function Login() {
   const navigate = useNavigate();
+  const { setIsLogged }: isLoggedContext = useContext(LoginContext);
 
   const [emailUser, setEmailUser] = useState<string>("");
   const [passwordUser, setPasswordUser] = useState<string>("");
@@ -52,6 +57,7 @@ function Login() {
         .then((res) => {
           const response = res.data.success;
           if (response) {
+            setIsLogged(true);
             navigate("/Home");
           } else {
             setParagrafPassword("Email ou senha inválidos");
