@@ -21,7 +21,7 @@ function Header() {
         </div>
         {isLogged && nameUser ? (
           <div className="flex space-x-5">
-            {/* Links para usuários não logados */}
+            {/* Links para usuários logados */}
             <div className="flex items-center space-x-2 cursor-pointer hover:scale-105 transition-transform whitespace-nowrap">
               <Link to={"/Home"} className="text-sm">
                 Home
@@ -50,7 +50,7 @@ function Header() {
           </div>
         ) : (
           <div className="flex space-x-6">
-            {/* Links para usuários logados */}
+            {/* Links para usuários não logados */}
             <div className="flex items-center space-x-2 cursor-pointer hover:scale-105 transition-transform whitespace-nowrap">
               <Link to={"/Home"} className="text-sm">
                 Home
@@ -93,7 +93,6 @@ function Header() {
         className={`z-30 fixed top-0 right-0 h-full w-80 duration-300 px-2 py-2 border-l border-stone-700 rounded-l-xl ${
           isClicked ? "translate-x-0" : "translate-x-full"
         }`}
-        
       >
         {isClicked && <SideBar setOpenSideBar={setOpenSideBar} />}
       </div>

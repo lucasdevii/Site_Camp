@@ -6,15 +6,13 @@ import Home from "./pages/Home";
 import Chats from "./pages/Chats";
 import Login from "./pages/Login";
 import Sign from "./pages/Sign";
-import Config from "./pages/Config_User";
-import Friends from "./pages/Friends_Add";
-import History from "./pages/History_Guide";
+import Layout from "./LayoutApp/AppLayout.tsx";
+// import Config from "./pages/Config_User";
+// import Friends from "./pages/Friends_Add";
+// import History from "./pages/History_Guide";
 import Perfil from "./pages/Perfil";
 
-import Header from "./components/header";
 import "./index.css";
-
-import { LoginProvider } from "./Context/provider_login";
 
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
@@ -35,11 +33,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 const router = createBrowserRouter([
   {
     path: "/",
-    element: (
-      <LoginProvider>
-        <Header />
-      </LoginProvider>
-    ),
+    element: <Layout />,
     children: [
       {
         path: "Home",
@@ -65,18 +59,18 @@ const router = createBrowserRouter([
         path: "Perfil",
         element: <Perfil />,
       },
-      {
-        path: "History_Campaigns",
-        element: <History />,
-      },
-      {
-        path: "Friends",
-        element: <Friends />,
-      },
-      {
-        path: "Config_User",
-        element: <Config />,
-      },
+      // {
+      //   path: "History_Campaigns",
+      //   element: <History />,
+      // },
+      // {
+      //   path: "Friends",
+      //   element: <Friends />,
+      // },
+      // {
+      //   path: "Config_User",
+      //   element: <Config />,
+      // },
     ],
   },
 ]);

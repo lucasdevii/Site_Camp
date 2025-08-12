@@ -4,7 +4,7 @@ import ModalLogout from "./modal_logout_confirmation";
 import { useNavigate } from "react-router-dom";
 
 type SideBarProps = {
-  setOpenSideBar: (value: boolean) => void;
+  setOpenSideBar: React.Dispatch<React.SetStateAction<boolean>>;
 };
 type ContextsType = {
   nameUser: string;
@@ -117,7 +117,12 @@ function SideBar({ setOpenSideBar }: SideBarProps) {
           <span className="font-serif bg-transparent">Deslogar</span>
         </div>
       </div>
-      {modalIsTrue && <ModalLogout setModalIsTrue={setModalIsTrue} />}
+      {modalIsTrue && (
+        <ModalLogout
+          setModalIsTrue={setModalIsTrue}
+          setOpenSideBar={setOpenSideBar}
+        />
+      )}
     </aside>
   );
 }

@@ -7,13 +7,13 @@ type UserData = {
   password: string;
   email: string;
 };
-interface isLoggedContext {
+interface TypeIsLoggedContext {
   setIsLogged: (value: boolean) => void;
 }
 
 function Login() {
   const navigate = useNavigate();
-  const { setIsLogged }: isLoggedContext = useContext(LoginContext);
+  const { setIsLogged }: TypeIsLoggedContext = useContext(LoginContext)!;
 
   const [emailUser, setEmailUser] = useState<string>("");
   const [passwordUser, setPasswordUser] = useState<string>("");
@@ -61,6 +61,7 @@ function Login() {
             navigate("/Home");
           } else {
             setParagrafPassword("Email ou senha inválidos");
+            setIsLogged(false);
           }
         })
         .catch((error) => {

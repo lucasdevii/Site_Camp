@@ -1,15 +1,20 @@
 import axios from "axios";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { LoginContext } from "../Context/context_login";
 
 function Sign() {
-  const navigate = useNavigate();
-
   type UserData = {
     name: string;
     password: string;
     email: string;
   };
+  interface TypeIsLoggedContext {
+    setIsLogged: (value: boolean) => void;
+  }
+
+  const navigate = useNavigate();
+  const { setIsLogged }: TypeIsLoggedContext = useContext(LoginContext)!;
 
   const [nameUser, setNameUser] = useState<string>("");
   const [emailUser, setEmailUser] = useState<string>("");
@@ -64,6 +69,7 @@ function Sign() {
           const response = res.data.success;
           console.log(response);
           if (response) {
+            setIsLogged(true);
             navigate("/Home");
           } else {
             setEmailUser("");

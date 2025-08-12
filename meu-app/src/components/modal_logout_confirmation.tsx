@@ -1,11 +1,21 @@
 import axios from "axios";
+import { useContext } from "react";
 import { createPortal } from "react-dom";
+import { LoginContext } from "../Context/context_login";
 
 type setModalType = {
   setModalIsTrue: React.Dispatch<React.SetStateAction<boolean>>;
+  setOpenSideBar: React.Dispatch<React.SetStateAction<boolean>>;
 };
+interface TypeIsLoggedContext {
+  setIsLogged: (value: boolean) => void;
+}
 
-export default function ModalLogout({ setModalIsTrue }: setModalType) {
+export default function ModalLogout({
+  setModalIsTrue,
+  setOpenSideBar,
+}: setModalType) {
+  const { setIsLogged }: TypeIsLoggedContext = useContext(LoginContext)!;
   function RemoveAccount() {
     axios
       .post(
@@ -14,7 +24,8 @@ export default function ModalLogout({ setModalIsTrue }: setModalType) {
         { withCredentials: true }
       )
       .then(() => {
-        document.location.reload();
+        setOpenSideBar(false);
+        setIsLogged(false);
         setModalIsTrue(false);
       })
       .catch((error) => console.log(error));

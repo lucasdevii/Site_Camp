@@ -22,17 +22,21 @@ export const LoginProvider = ({ children }: LoginProviderProps) => {
         }
       )
       .then((res) => {
+        setIsLogged(true);
         setNameUser(res.data.name || "");
         setDescription(res.data.description || "");
       })
       .catch(() => {
+        setIsLogged(false);
         setNameUser("");
         setDescription("");
       });
   }, []);
 
   return (
-    <LoginContext.Provider value={{ nameUser, description, isLogged, setIsLogged }}>
+    <LoginContext.Provider
+      value={{ nameUser, description, isLogged, setIsLogged }}
+    >
       {children}
     </LoginContext.Provider>
   );
