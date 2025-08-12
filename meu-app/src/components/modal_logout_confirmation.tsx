@@ -1,3 +1,4 @@
+import axios from "axios";
 import { createPortal } from "react-dom";
 
 type setModalType = {
@@ -5,8 +6,18 @@ type setModalType = {
 };
 
 export default function ModalLogout({ setModalIsTrue }: setModalType) {
-  function RemoveAccount(){
-    return  
+  function RemoveAccount() {
+    axios
+      .post(
+        "http://localhost:4001/Desconnect_Account",
+        {},
+        { withCredentials: true }
+      )
+      .then(() => {
+        document.location.reload();
+        setModalIsTrue(false);
+      })
+      .catch((error) => console.log(error));
   }
   return createPortal(
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
@@ -24,8 +35,9 @@ export default function ModalLogout({ setModalIsTrue }: setModalType) {
           >
             Cancelar
           </button>
-          <button className="px-3 py-1 bg-red-500 text-white rounded  transition-transform hover:scale-110"
-          onClick={() => RemoveAccount()}
+          <button
+            className="px-3 py-1 bg-red-500 text-white rounded  transition-transform hover:scale-110"
+            onClick={() => RemoveAccount()}
           >
             Sair
           </button>
