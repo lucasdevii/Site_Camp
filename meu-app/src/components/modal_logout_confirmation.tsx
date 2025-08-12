@@ -9,6 +9,9 @@ type setModalType = {
 };
 interface TypeIsLoggedContext {
   setIsLogged: (value: boolean) => void;
+  description: string;
+  nameUser: string;
+  isLogged: boolean;
 }
 
 export default function ModalLogout({

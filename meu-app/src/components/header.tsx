@@ -6,6 +6,8 @@ import { LoginContext } from "../Context/context_login";
 interface SideBarProps {
   nameUser: string;
   isLogged: boolean;
+  setIsLogged: (value: boolean) => void;
+  description: string;
 }
 function Header() {
   const { nameUser, isLogged }: SideBarProps = useContext(LoginContext)!; //cuidado para essa parada n ficar undefined;

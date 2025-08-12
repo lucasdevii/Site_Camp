@@ -8,7 +8,10 @@ type UserData = {
   email: string;
 };
 interface TypeIsLoggedContext {
+  nameUser: string;
   setIsLogged: (value: boolean) => void;
+  description: string;
+  isLogged: boolean;
 }
 
 function Login() {
