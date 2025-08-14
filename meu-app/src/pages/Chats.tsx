@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import SideBar from "../components/sideContacts";
-import axios from "axios";
 
 function Chats() {
   type Friends = {

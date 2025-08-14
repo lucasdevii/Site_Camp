@@ -1,5 +1,5 @@
 import { useContext, useState } from "react";
-import { Link, Outlet } from "react-router-dom";
+import { Link } from "react-router-dom";
 import SideBar from "./sideBarInfo";
 import { LoginContext } from "../Context/context_login";
 
@@ -98,11 +98,6 @@ function Header() {
       >
         {isClicked && <SideBar setOpenSideBar={setOpenSideBar} />}
       </div>
-
-      {/* Conteúdo da rota atual */}
-      <main>
-        <Outlet />
-      </main>
     </>
   );
 }

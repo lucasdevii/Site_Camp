@@ -5,22 +5,56 @@ import cookieParser from "cookie-parser";
 import { PrismaClient } from "@prisma/client";
 import nodemailer from "nodemailer";
 import bcrypt from "bcryptjs";
+import { Server } from "socket.io";
+import { createServer } from "http";
+//    TYPES  |
+//           V
+
+interface UserTypes {
+  name: string;
+  email: string;
+  password: string;
+}
+interface ChatTypes {
+  id: number;
+  name: string;
+}
+interface FriendsChatsObjectTypes {
+  name: string;
+  id: number;
+  newMessage: boolean;
+}
+interface FriendsChatsArrayType {
+  chats: FriendsChatsArrayType[];
+}
 
 const prisma = new PrismaClient();
 const PORT = 4001;
 
 const CHAVE_HASH = "HASHJWTDECODE";
 
-type UserTypes = {
-  name: string;
-  email: string;
-  password: string;
-};
-
 const App = express();
+const httpServer = createServer(App);
+const io = new Server(httpServer, {
+  cors: {
+    origin: "http://localhost:4000",
+  },
+});
+App.use(express.static("public"));
 App.use(cors({ origin: "http://localhost:4000", credentials: true }));
 App.use(express.json());
 App.use(cookieParser());
+io.on("connect", (socket) => {
+  console.log("novo cliente conectado: ", socket.id);
+  //É a rota para saber quando tem notificação
+  socket.on("joinInFriendsChats", ({ chats }: FriendsChatsArrayType) => {});
+  //É a rota para pedir as mensagens e receber em tempo real dentro de um chat em especifico
+  socket.on("joinInChat", (idUser: ChatTypes) => {
+    socket.join(`Chat_${idUser.name}`);
+    console.log("O usuário se conectou no cabra: ", idUser.name);
+  });
+  socket.on("disconnect", () => {});
+});
 
 App.post("/SignUp", async (req, res) => {
   const token = req.cookies.token;
