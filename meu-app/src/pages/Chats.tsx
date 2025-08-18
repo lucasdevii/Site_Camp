@@ -24,7 +24,7 @@ function Chats() {
   }, []);
 
   return (
-    <div className="flex">
+    <div className="flex h-full">
       <div className="">
         <SideBar
           friendsList={friendsList}
@@ -32,19 +32,26 @@ function Chats() {
           setNameChat={setNameChat}
         />
       </div>
-      <div className="w-full h-14 bg-[#3e362e] mt-12 ml-80">
+      <div className=" h-full w-full ml-80 flex flex-col">
         {!isClickedChat ? (
-          <div>
-            <div className="w-full h-full"></div>
-          </div>
+          <div></div>
         ) : (
-          <div className="bg-transparent">
-            <div className="my-4 mx-3 ">
-              <div className=" text-lg font-bold">
-                <h1 className="">{nameChat}</h1>
+          <div className="h-screen flex flex-col justify-between">
+            <div className="my-12 py-4 px-3 bg-[#3e362e] flex ">
+              <div className="bg-transparent">
+                <div className="bg-transparent">
+                  <div className=" text-lg font-bold bg-transparent">
+                    <h1 className="bg-transparent">{nameChat}</h1>
+                  </div>
+                </div>
               </div>
             </div>
-            <div></div>
+            <div className="h-16 flex justify-center">
+              <input
+                type="text"
+                className="bg-[#3e362e] h-10 w-5/6 rounded-2xl px-2"
+              />
+            </div>
           </div>
         )}
       </div>

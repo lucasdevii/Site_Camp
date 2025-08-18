@@ -16,7 +16,7 @@ interface UserTypes {
   password: string;
 }
 interface ChatTypes {
-  id: number;
+  idChat: number;
   name: string;
 }
 interface FriendsChatsObjectTypes {
@@ -47,11 +47,26 @@ App.use(cookieParser());
 io.on("connect", (socket) => {
   console.log("novo cliente conectado: ", socket.id);
   //É a rota para saber quando tem notificação
-  socket.on("joinInFriendsChats", ({ chats }: FriendsChatsArrayType) => {});
+  // socket.on("joinInFriendsChats", ({ chats }: FriendsChatsArrayType) => {
+  //   socket.join(`Chat_Geral`);
+  //   console.log("O usuario se conectou no chat geral de notificações");
+  // });
   //É a rota para pedir as mensagens e receber em tempo real dentro de um chat em especifico
-  socket.on("joinInChat", (idUser: ChatTypes) => {
+  socket.on("joinInChat", async (idUser: ChatTypes) => {
     socket.join(`Chat_${idUser.name}`);
     console.log("O usuário se conectou no cabra: ", idUser.name);
+    const arrayConversations = await prisma.chats.findMany({
+      where: {},
+      select: {
+        id: true,
+        conversation: true,
+        createdAt: true,
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+    socket.emit("ChatHistory", arrayConversations);
   });
   socket.on("disconnect", () => {});
 });
