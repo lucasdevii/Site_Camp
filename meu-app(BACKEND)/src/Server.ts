@@ -7,6 +7,7 @@ import nodemailer from "nodemailer";
 import bcrypt from "bcryptjs";
 import { Server } from "socket.io";
 import { createServer } from "http";
+import rateLimit from "express-rate-limit";
 //    TYPES  |
 //           V
 
@@ -27,19 +28,31 @@ interface FriendsChatsObjectTypes {
 interface FriendsChatsArrayType {
   chats: FriendsChatsArrayType[];
 }
+interface SendMessageFrontEmitType {
+  idUser: number;
+  message: string;
+  chatRoomId: number;
+}
 
 const prisma = new PrismaClient();
 const PORT = 4001;
+const limiter = rateLimit({
+  windowMs: 10000,
+  max: 100,
+  message: "Muitas requisições vindas desse IP, tente novamente mais tarde",
+});
 
 const CHAVE_HASH = "HASHJWTDECODE";
 
 const App = express();
+
 const httpServer = createServer(App);
 const io = new Server(httpServer, {
   cors: {
     origin: "http://localhost:4000",
   },
 });
+App.use(limiter);
 App.use(express.static("public"));
 App.use(cors({ origin: "http://localhost:4000", credentials: true }));
 App.use(express.json());
@@ -55,22 +68,47 @@ io.on("connect", (socket) => {
   socket.on("joinInChat", async (idUser: ChatTypes) => {
     socket.join(`Chat_${idUser.name}`);
     console.log("O usuário se conectou no cabra: ", idUser.name);
-    const arrayConversations = await prisma.chats.findMany({
+    //Quando o usuario aceitar o pedido de amizade, essa ligação no chat será criado
+    const arrayConversations = await prisma.chatInfos.findMany({
       where: {},
       select: {
         id: true,
-        conversation: true,
-        createdAt: true,
-      },
-      orderBy: {
-        createdAt: "desc",
       },
     });
     socket.emit("ChatHistory", arrayConversations);
   });
   socket.on("disconnect", () => {});
 });
-
+App.post("/AddMessage", async (req, res) => {
+  const { message, chatRoomId, idUser }: SendMessageFrontEmitType = req.body;
+  if (message.trim() !== "" && message.length < 4000) {
+    const result = await prisma.chatTalks.create({
+      data: {
+        authorId: idUser,
+        conversation: message,
+        chatRoomId: chatRoomId,
+      },
+      select: {
+        conversation: true,
+      },
+    });
+    result
+      ? res.status(200).json({ isValid: true })
+      : res
+          .status(401)
+          .json({ isValid: false, message: "algum erro na criação do prisma" });
+  }
+  if (message.trim() == "") {
+    return res
+      .status(401)
+      .json({ isValid: false, message: "Mensagem sem conteúdo" });
+  }
+  if (message.length >= 4000) {
+    res
+      .status(401)
+      .json({ isValid: false, message: "Número de caractéres ultrapassados" });
+  }
+});
 App.post("/SignUp", async (req, res) => {
   const token = req.cookies.token;
 
