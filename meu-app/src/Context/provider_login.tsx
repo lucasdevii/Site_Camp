@@ -11,6 +11,7 @@ export const LoginProvider = ({ children }: LoginProviderProps) => {
   const [isLogged, setIsLogged] = useState<boolean>(false);
   const [nameUser, setNameUser] = useState<string>("");
   const [description, setDescription] = useState<string>("");
+  const [codeInvite, setCodeInvite] = useState<string>("");
 
   useEffect(() => {
     axios
@@ -25,17 +26,19 @@ export const LoginProvider = ({ children }: LoginProviderProps) => {
         setIsLogged(true);
         setNameUser(res.data.name || "");
         setDescription(res.data.description || "");
+        setCodeInvite(res.data.codeInvite || "");
       })
       .catch(() => {
         setIsLogged(false);
         setNameUser("");
         setDescription("");
+        setCodeInvite("");
       });
   }, []);
 
   return (
     <LoginContext.Provider
-      value={{ nameUser, description, isLogged, setIsLogged }}
+      value={{ nameUser, description, isLogged, setIsLogged, codeInvite }}
     >
       {children}
     </LoginContext.Provider>

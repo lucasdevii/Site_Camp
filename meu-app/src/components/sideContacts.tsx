@@ -1,13 +1,12 @@
 import { useState } from "react";
 
 import ModalFriendsNew from "./modalFriendsNew";
-import UrlCreate from "./URLChangeForString/URLChangeForString";
+//import UrlCreate from "./URLChangeForString/URLChangeForString";
 
 type Friends = {
-  id: number;
+  code: string | null;
   name: string;
   isOnline: boolean;
-  photo?: File;
 };
 type SideBarProp = {
   friendsList: Friends[];
@@ -17,44 +16,44 @@ type SideBarProp = {
 
 function SideBar({ friendsList, setClickedChat, setNameChat }: SideBarProp) {
   const [modalOpen, SetModalOpen] = useState<boolean>(false);
-  const [idChat, setIdChat] = useState<number | null>(null);
+  const [idChat, setIdChat] = useState<string | null>(null);
 
   function ListFriends() {
     return (
       <>
         {friendsList.map((friend) => {
-          const url: string | undefined = UrlCreate(friend.photo);
+          //const url: string | undefined = UrlCreate(friend.photo);
           return (
             <div
-              key={friend.id}
+              key={friend.code}
               className={`flex items-center my-2 hover:bg-stone-700 mr-2 rounded-sm p-1 pl-2 cursor-pointer ${
-                idChat == friend.id ? "bg-[#3e362e]" : ""
+                idChat == friend.code ? "bg-[#3e362e]" : ""
               }`}
               onClick={() => {
-                if (idChat == friend.id) {
+                if (idChat == friend.code) {
                   setClickedChat(false);
                   setNameChat(null);
                   setIdChat(null);
                 } else {
                   setClickedChat(true);
                   setNameChat(friend.name);
-                  setIdChat(friend.id);
+                  setIdChat(friend.code);
                 }
               }}
             >
               <div className="mr-3 bg-transparent">
-                {friend.photo ? (
+                {/* {friend.photo ? (
                   <div className="bg-transparent">
                     <img src={url} alt={"USER:"} />
                   </div>
-                ) : (
-                  <div className="flex bg-transparent">
-                    <img
-                      src="./circle-person-profile-user-group-people-svgrepo-com.svg"
-                      alt=""
-                    />
-                  </div>
-                )}
+                ) : ( */}
+                <div className="flex bg-transparent">
+                  <img
+                    src="./circle-person-profile-user-group-people-svgrepo-com.svg"
+                    alt=""
+                  />
+                </div>
+                {/* )} */}
               </div>
               <div className="flex flex-col bg-transparent">
                 <h2 className="bg-transparent">{`${friend.name}`}</h2>

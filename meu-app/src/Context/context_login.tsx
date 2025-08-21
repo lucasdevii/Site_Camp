@@ -5,6 +5,7 @@ export interface LoginContextType {
   description: string;
   isLogged: boolean;
   setIsLogged: (value: boolean) => void;
+  codeInvite: string;
 }
 
 export const LoginContext = createContext<LoginContextType | undefined>(

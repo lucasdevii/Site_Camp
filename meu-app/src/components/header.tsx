@@ -8,6 +8,7 @@ interface SideBarProps {
   isLogged: boolean;
   setIsLogged: (value: boolean) => void;
   description: string;
+  codeInvite: string;
 }
 function Header() {
   const { nameUser, isLogged }: SideBarProps = useContext(LoginContext)!; //cuidado para essa parada n ficar undefined;
@@ -25,17 +26,29 @@ function Header() {
           <div className="flex space-x-5">
             {/* Links para usuários logados */}
             <div className="flex items-center space-x-2 cursor-pointer hover:scale-105 transition-transform whitespace-nowrap">
-              <Link to={"/Home"} className="text-sm">
+              <Link
+                to={"/Home"}
+                className="text-sm"
+                onClick={() => setOpenSideBar(false)}
+              >
                 Home
               </Link>
             </div>
             <div className="flex items-center space-x-2 cursor-pointer hover:scale-105 transition-transform whitespace-nowrap">
-              <Link to={"/Chats"} className="text-sm">
+              <Link
+                to={"/Chats"}
+                className="text-sm"
+                onClick={() => setOpenSideBar(false)}
+              >
                 Conversas
               </Link>
             </div>
             <div className="flex items-center space-x-2 cursor-pointer hover:scale-105 transition-transform whitespace-nowrap">
-              <Link to={"/Salas"} className="text-sm">
+              <Link
+                to={"/Salas"}
+                className="text-sm"
+                onClick={() => setOpenSideBar(false)}
+              >
                 Salas
               </Link>
             </div>
@@ -54,17 +67,29 @@ function Header() {
           <div className="flex space-x-6">
             {/* Links para usuários não logados */}
             <div className="flex items-center space-x-2 cursor-pointer hover:scale-105 transition-transform whitespace-nowrap">
-              <Link to={"/Home"} className="text-sm">
+              <Link
+                to={"/Home"}
+                className="text-sm"
+                onClick={() => setOpenSideBar(false)}
+              >
                 Home
               </Link>
             </div>
             <div className="flex items-center space-x-2 cursor-pointer hover:scale-105 transition-transform whitespace-nowrap">
-              <Link to={"/Chats"} className="text-sm">
+              <Link
+                to={"/Chats"}
+                className="text-sm"
+                onClick={() => setOpenSideBar(false)}
+              >
                 Conversas
               </Link>
             </div>
             <div className="flex items-center space-x-2 cursor-pointer hover:scale-105 transition-transform whitespace-nowrap">
-              <Link to={"/Salas"} className="text-sm">
+              <Link
+                to={"/Salas"}
+                className="text-sm"
+                onClick={() => setOpenSideBar(false)}
+              >
                 Salas
               </Link>
             </div>
@@ -73,6 +98,7 @@ function Header() {
                 <Link
                   to={"/Login"}
                   className="px-4 py-2 bg-transparent text-sm"
+                  onClick={() => setOpenSideBar(false)}
                 >
                   Login
                 </Link>
@@ -81,6 +107,7 @@ function Header() {
                 <Link
                   to={"/Sign_Up"}
                   className="px-3 py-2 bg-transparent text-sm"
+                  onClick={() => setOpenSideBar(false)}
                 >
                   Sign-up
                 </Link>
@@ -92,7 +119,7 @@ function Header() {
 
       {/* Sidebar que aparece quando isClicked for true */}
       <div
-        className={`z-30 fixed top-0 right-0 h-full w-80 duration-300 px-2 py-2 border-l border-stone-700 rounded-l-xl ${
+        className={`z-30 fixed top-0 right-0 h-full w-80 duration-300 px-2 py-2 border-l border-stone-700 bg-stone-800 rounded-l-xl ${
           isClicked ? "translate-x-0" : "translate-x-full"
         }`}
       >

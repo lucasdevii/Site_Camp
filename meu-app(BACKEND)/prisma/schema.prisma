@@ -13,12 +13,16 @@ model User {
   email    String  @unique
   password String
   details  String?
+  code     String     @unique @default(uuid())
+  //falta dar o prisma generate e dar upload no banco
+  isOnline Boolean
+
 
   sentFriendRequests     Friends[] @relation("SentRequests")
   receivedFriendRequests Friends[] @relation("ReceivedRequests")
 }
 
-model Friends {
+model FriendsStatus {
   id             Int              @id @default(autoincrement())
   requester      User             @relation("SentRequests", fields: [idFirstPlayer], references: [id])
   receiver       User             @relation("ReceivedRequests", fields: [idSecondPlayer], references: [id])

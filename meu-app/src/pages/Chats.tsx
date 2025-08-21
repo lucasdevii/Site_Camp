@@ -1,31 +1,37 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import SideBar from "../components/sideContacts";
-import { io } from "socket.io-client";
 import axios from "axios";
+import { LoginContext } from "../Context/context_login";
 
-const socket = io("http://localhost:4001");
-
+interface ContextType {
+  nameUser: string;
+  isLogged: boolean;
+  setIsLogged: (value: boolean) => void;
+  description: string;
+  codeInvite: string;
+}
+type FriendsObjType = {
+  code: string | null;
+  name: string;
+  isOnline: boolean;
+};
 function Chats() {
-  type Friends = {
-    id: number;
-    name: string;
-    isOnline: boolean;
-    photo?: File;
-  };
-  const [friendsList, setFriendsList] = useState<Friends[]>([]);
+  const [friendsList, setFriendsList] = useState<FriendsObjType[]>([]);
   const [isClickedChat, setClickedChat] = useState<boolean>(false);
   const [nameChat, setNameChat] = useState<string | null>(null);
   const [messageInput, setMessageInput] = useState<string>("");
 
-  //async function ListFriends() {}
+  const { codeInvite }: ContextType = useContext(LoginContext)!;
 
   useEffect(() => {
-    setFriendsList([
-      { id: 1, name: "Geo", isOnline: true },
-      { id: 2, name: "Gorila", isOnline: false },
-      { id: 3, name: "Ana", isOnline: true },
-      { id: 4, name: "Carlos", isOnline: false },
-    ]);
+    axios
+      .post("Friends/List", { code: codeInvite })
+      .then((res) => {
+        setFriendsList(res.data.friends);
+      })
+      .catch((error) => {
+        console.log("Erro no servidor", error);
+      });
   }, []);
 
   function SendMessage() {
@@ -56,7 +62,7 @@ function Chats() {
         {!isClickedChat ? (
           <div></div>
         ) : (
-          <div className="h-screen flex flex-col justify-between">
+          <div className="h-screen flex flex-col justify-between ">
             <div className="my-12 py-4 px-3 bg-[#3e362e] flex ">
               <div className="bg-transparent">
                 <div className="bg-transparent">
@@ -66,8 +72,8 @@ function Chats() {
                 </div>
               </div>
             </div>
-            <div className="flex justify-center">
-              <div className="bg-[#3e362e] my-4 h-12 w-full mx-3 rounded-xl px-2 flex items-center space-x-2">
+            <div className="flex justify-center border-t border-stone-600">
+              <div className="bg-[#3e362e] my-3 h-12 w-full mx-3 rounded-xl px-2 flex items-center space-x-2">
                 <input
                   placeholder="Message"
                   className="h-full w-full bg-transparent focus:outline-none"

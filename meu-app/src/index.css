@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 * {
+  margin: 0;
+  padding: 0;
+  color: white;
+  font-family: "Noto Serif", serif;
+}
+header {
   background-color: #1d1a16;
   margin: 0;
   padding: 0;
@@ -28,4 +34,5 @@
 }
 body {
   overflow-y: scroll;
+  background-color: #1d1a16;
 }

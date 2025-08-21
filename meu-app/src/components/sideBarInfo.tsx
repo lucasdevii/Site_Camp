@@ -10,11 +10,12 @@ type ContextsType = {
   nameUser: string;
   description: string;
   isLogged: boolean;
+  codeInvite: string;
 };
 
 function SideBar({ setOpenSideBar }: SideBarProps) {
   const navigate = useNavigate();
-  const { nameUser, description }: ContextsType = useContext(LoginContext)!; //cuidado tbm, ficar undefined provavelmente traria problemas;
+  const { nameUser, codeInvite }: ContextsType = useContext(LoginContext)!; //cuidado tbm, ficar undefined provavelmente traria problemas;
   const [modalIsTrue, setModalIsTrue] = useState<boolean>(false);
   return (
     <aside className="rounded-l-2xl px-1 mx-1.5 py-2">
@@ -26,7 +27,7 @@ function SideBar({ setOpenSideBar }: SideBarProps) {
           <div className="">
             <p className="text-xs">{`${nameUser}`}</p>
             <div className="flex space-x-2">
-              <p className="text-xs">{`codigo de amizade${description}`}</p>
+              <p className="text-[9px]">{`${codeInvite}`}</p>
               <div className="w-3 cursor-pointer hover:scale-125 duration-100 flex items-center">
                 <img src="copy.svg" alt="" />
               </div>
@@ -48,73 +49,77 @@ function SideBar({ setOpenSideBar }: SideBarProps) {
           className="h-7 my-1 hover:bg-stone-800 w-full cursor-pointer space-x-1 px-1 mx-1 flex items-center hover:scale-105 duration-150"
           onClick={() => {}}
         >
-          <img src="face-smile.svg" alt="" className="bg-transparent w-5" />
-          <span className="font-serif bg-transparent">Alterar status</span>
+          <img src="face-smile.svg" alt="" className=" w-5" />
+          <span className="font-serif ">Alterar status</span>
         </div>
         <hr />
         <div
           className="h-7 my-1 hover:bg-stone-800 w-full cursor-pointer space-x-1 px-1 mx-1 flex items-center hover:scale-105 duration-150"
           onClick={() => {
             navigate("/Perfil.tsx");
+            setOpenSideBar(false);
           }}
         >
-          <img src="user-solo.svg" alt="" className="bg-transparent w-5" />
-          <span className="font-serif bg-transparent">Seu perfil</span>
+          <img src="user-solo.svg" alt="" className=" w-5" />
+          <span className="font-serif ">Seu perfil</span>
         </div>
         <div
           className="h-7 my-1 hover:bg-stone-800 w-full cursor-pointer space-x-1 px-1 mx-1 flex items-center hover:scale-105 duration-150"
           onClick={() => {
             navigate("/Campaigns_user.tsx");
+            setOpenSideBar(false);
           }}
         >
-          <img src="list.svg" alt="" className="bg-transparent w-5" />
-          <span className="font-serif bg-transparent">Suas campanhas</span>
+          <img src="list.svg" alt="" className=" w-5" />
+          <span className="font-serif ">Suas campanhas</span>
         </div>
         <div
           className="h-7 my-1 hover:bg-stone-800 w-full cursor-pointer space-x-1 px-1 mx-1 flex items-center hover:scale-105 duration-150"
           onClick={() => {
             navigate("/History_Guide.tsx");
+            setOpenSideBar(false);
           }}
         >
-          <img src="book.svg" alt="" className="bg-transparent w-5" />
-          <span className="font-serif bg-transparent">Suas historias</span>
+          <img src="book.svg" alt="" className=" w-5" />
+          <span className="font-serif ">Suas historias</span>
         </div>
         <div
           className="h-7 my-1 hover:bg-stone-800 w-full cursor-pointer space-x-1 px-1 mx-1 flex items-center hover:scale-105 duration-150"
           onClick={() => {
-            navigate("/Friends_Add.tsx");
+            navigate("/Friends");
+            setOpenSideBar(false);
           }}
         >
-          <img src="user-search.svg" alt="" className="bg-transparent w-5" />
-          <span className="font-serif bg-transparent">Suas amizades</span>
+          <img src="user-search.svg" alt="" className=" w-5" />
+          <span className="font-serif ">Suas amizades</span>
         </div>
         <div
           className="h-7 my-1 hover:bg-stone-800 w-full cursor-pointer space-x-1 px-1 mx-1 flex items-center hover:scale-105 duration-150"
           onClick={() => {
             navigate("");
+            setOpenSideBar(false);
           }}
         >
-          <img src="settings-point.svg" alt="" className="w-5 bg-transparent" />
-          <span className="font-serif bg-transparent">
-            Gerenciamento de grupos
-          </span>
+          <img src="settings-point.svg" alt="" className="w-5 " />
+          <span className="font-serif ">Gerenciamento de grupos</span>
         </div>
         <hr className="my-3" />
         <div
           className="h-7 my-1 hover:bg-stone-800 w-full cursor-pointer space-x-1 px-1 mx-1 flex items-center hover:scale-105 duration-150"
           onClick={() => {
             navigate("/Config_User.tsx");
+            setOpenSideBar(false);
           }}
         >
-          <img src="engrenagem.svg" alt="" className="bg-transparent w-5" />
-          <span className="font-serif bg-transparent">Configurações</span>
+          <img src="engrenagem.svg" alt="" className=" w-5" />
+          <span className="font-serif ">Configurações</span>
         </div>
         <div
           className="h-7 my-1 hover:bg-stone-800 w-full cursor-pointer space-x-1 px-1 mx-1 flex items-center hover:scale-105 duration-150"
           onClick={() => setModalIsTrue(!modalIsTrue)}
         >
-          <img src="exit-door.svg" alt="" className="bg-transparent w-5" />
-          <span className="font-serif bg-transparent">Deslogar</span>
+          <img src="exit-door.svg" alt="" className=" w-5" />
+          <span className="font-serif ">Deslogar</span>
         </div>
       </div>
       {modalIsTrue && (
