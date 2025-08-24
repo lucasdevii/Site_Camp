@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { LoginContext } from "../Context/context_login";
 import axios from "axios";
+import ModalFriendsNew from "../components/modalFriendsNew";
 
 interface ContextType {
   nameUser: string;
@@ -20,6 +21,7 @@ interface RequestsObjType {
 interface ReceivesObjType {
   name: string;
   code: string;
+  createdAt: string;
 }
 
 function Friends() {
@@ -29,38 +31,88 @@ function Friends() {
   const [listRequests, setListRequests] = useState<RequestsObjType[]>([]);
   const [listReceives, setListReceives] = useState<ReceivesObjType[]>([]);
   const [positionBarClicked, setPositionBarClicked] = useState<string>();
+  const [buttonNewFriendIsActive, setButtonNewFriendIsActive] =
+    useState<boolean>(false);
   useEffect(() => {
-    axios
-      .post("/Friends/List", codeInvite)
-      .then((res) => {
-        setListFriends(res.data.message);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-    axios
-      .post("/Friends/Requests", codeInvite)
-      .then((res) => {
-        setListRequests(res.data.message);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-    axios
-      .post("/Friends/Receives", codeInvite)
-      .then((res) => {
-        setListReceives(res.data.message);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, []);
+    if (!codeInvite) return;
+    const fetchData = () => {
+      axios
+        .post("http://localhost:4001/Friends/List", { code: codeInvite })
+        .then((res) => {
+          if (res.data.success == true) {
+            setListFriends(res.data.friends);
+            console.log(res.data.friends);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+      axios
+        .post("http://localhost:4001/Friends/Requests", { code: codeInvite })
+        .then((res) => {
+          if (res.data.success == true) {
+            setListRequests(res.data.requests);
+            console.log(res.data.requests);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+      axios
+        .post("http://localhost:4001/Friends/Receives", { code: codeInvite })
+        .then((res) => {
+          if (res.data.success == true) {
+            setListReceives(res.data.receives);
+            console.log(res.data.receives);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    };
+    fetchData();
+  }, [codeInvite]);
   useEffect(() => {
     setIsLoading(false);
-  }, [listFriends]);
+  }, [listFriends, listReceives, listRequests]);
 
+  function ReceiverReject(codeReceiver: string) {
+    axios
+      .delete("http://localhost:4001/Friends/Reject_Receiver", {
+        data: {
+          codeReceiver: codeReceiver,
+          codeUser: codeInvite,
+        },
+        withCredentials: true,
+      })
+      .then((res) => {
+        if (!res.data.success) {
+          console.log(res.data.message);
+        } else {
+          console.log(res.data.message);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        console.log("deu erro aqui hein");
+      });
+    axios
+      .post("http://localhost:4001/Friends/Receives", { code: codeInvite })
+      .then((res) => {
+        if (res.data.success == true) {
+          setListReceives(res.data.receives);
+          console.log(res.data.receives);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+  function Invite_Accept(codeReceiver: string) {
+    axios.post("http://localhost:4001/Friends/Accept_Receiver");
+  }
   return (
-    <div className="pt-16 h-screen w-full flex flex-col items-center">
+    <div className="pt-14 h-screen w-full flex flex-col items-center">
       {/* <div className="w-11/12 space-y-3">
         <h1 className="text-xl">Informações</h1>
         <div className="flex space-x-3">
@@ -166,8 +218,14 @@ function Friends() {
                   <img src="search_User.svg" alt="" className="invert w-40" />
                   <h2 className="text-lg">Nenhum amigo encontrado</h2>
                 </div>
-                <div className="mx-2 my-1">
+                <div className="mx-2 my-1 flex justify-between">
                   <p>{listFriends.length} / 20</p>
+                  <button
+                    onClick={() => setButtonNewFriendIsActive(true)}
+                    className="py-1 px-2 bg-yellow-700 rounded-xl"
+                  >
+                    Add friend
+                  </button>
                 </div>
               </div>
             )
@@ -189,9 +247,25 @@ function Friends() {
             listRequests.length > 0 ? (
               listRequests.map((request) => {
                 return (
-                  <li key={request.code} className="">
-                    {request.name}
-                  </li>
+                  <div
+                    key={request.code}
+                    className="flex justify-between mx-4 my-2 hover:bg-stone-700"
+                  >
+                    <div className="flex items-center space-x-2">
+                      <img
+                        src="circle-person-profile.svg"
+                        alt=""
+                        className="w-10"
+                      />
+                      <div className="flex flex-col ">
+                        <h2>{request.name}</h2>
+                        <p className="text-xs"> {request.code}</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center">
+                      <h3>Pedido pendente</h3>
+                    </div>
+                  </div>
                 );
               })
             ) : (
@@ -202,11 +276,13 @@ function Friends() {
                 </div>
                 <div className="mx-2 my-1 flex justify-between">
                   <p className="text-xl">{listRequests.length}</p>
-                  <img
-                    className="w-6 cursor-pointer duration-75 hover:scale-110"
-                    src="delete_Icon.svg"
-                    alt=""
-                  />
+                  {listRequests.length < 0 && (
+                    <img
+                      className="w-6 cursor-pointer duration-75 hover:scale-110"
+                      src="delete_Icon.svg"
+                      alt=""
+                    />
+                  )}
                 </div>
               </div>
             )
@@ -218,7 +294,7 @@ function Friends() {
         </div>
         {/*Terceiro slide*/}
         <div
-          className={`w-full h-full flex-shrink-0 duration-150 ${
+          className={`w-full h-full flex-shrink-0 duration-150 flex flex-col justify-between  ${
             positionBarClicked == "button_1" && "-translate-x-0"
           } ${positionBarClicked == "button_2" && "-translate-x-[100%]"} ${
             positionBarClicked == "button_3" && "-translate-x-[200%]"
@@ -228,24 +304,50 @@ function Friends() {
             listReceives.length > 0 ? (
               listReceives.map((receive) => {
                 return (
-                  <li key={receive.code} className="">
-                    {receive.name}
-                  </li>
+                  <div
+                    key={receive.code}
+                    className="flex justify-between mx-4 my-2"
+                  >
+                    <div className="flex items-center space-x-2">
+                      <img
+                        src="circle-person-profile.svg"
+                        alt=""
+                        className="w-10"
+                      />
+                      <div className="flex flex-col ">
+                        <h2 className="">{receive.name}</h2>
+                      </div>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <button
+                        className="px-3 py-1 bg-red-500 rounded-lg hover:scale-110 duration-100"
+                        onClick={() => ReceiverReject(receive.code)}
+                      >
+                        <img src="delete_Icon.svg" alt="" className="w-6" />
+                      </button>
+                      <button className="px-3 py-1 bg-green-500 rounded-lg hover:scale-110 duration-100">
+                        <img src="check_Icon.svg" alt="" className="w-6" />
+                      </button>
+                    </div>
+                  </div>
                 );
               })
             ) : (
-              <div className="h-full w-full flex flex-col justify-between">
+              <div className="h-full w-full flex flex-col justify-between overflow-y-auto">
                 <div className="flex flex-col h-full justify-center items-center">
                   <img src="search_User.svg" alt="" className="invert w-40" />
                   <h2 className="text-lg">Nenhum pedido recebido</h2>
                 </div>
                 <div className="mx-2 my-1 flex justify-between">
-                  <p className="text-xl">{listReceives.length}</p>
-                  <img
-                    className="w-6 cursor-pointer duration-75 hover:scale-110"
-                    src="delete_Icon.svg"
-                    alt=""
-                  />
+                  <div>
+                    {listReceives.length < 0 && (
+                      <img
+                        className="w-6 cursor-pointer duration-75 hover:scale-110"
+                        src="delete_Icon.svg"
+                        alt=""
+                      />
+                    )}
+                  </div>
                 </div>
               </div>
             )
@@ -254,6 +356,11 @@ function Friends() {
               <h2 className="text-lg">Carregando...</h2>
             </div>
           )}
+          <div className="w-full">
+            <p className="my-2 mx-4">
+              quantidade de pedidos: {listReceives.length}
+            </p>
+          </div>
         </div>
         {/*Quarto slide*/}
         <div
@@ -275,8 +382,12 @@ function Friends() {
             ) : (
               <div className="h-full w-full flex flex-col justify-between">
                 <div className="flex flex-col h-full justify-center items-center">
-                  <img src="search_User.svg" alt="" className="invert w-40" />
-                  <h2 className="text-lg">Nenhuma sujestão ainda...</h2>
+                  <img
+                    src="more_Some.svg"
+                    alt=""
+                    className="invert w-40 rotate-45"
+                  />
+                  <h2 className="text-lg">Page ainda n configurada</h2>
                 </div>
                 <div className="mx-2 my-1">
                   <p>{listFriends.length}</p>
@@ -290,6 +401,16 @@ function Friends() {
           )}
         </div>
       </div>
+      {buttonNewFriendIsActive ? (
+        <>
+          <ModalFriendsNew
+            setPositionBarClicked={setPositionBarClicked}
+            setButtonNewFriendIsActive={setButtonNewFriendIsActive}
+          />
+        </>
+      ) : (
+        <div></div>
+      )}
     </div>
   );
 }

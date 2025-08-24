@@ -14,42 +14,46 @@ model User {
   password String
   details  String?
   code     String     @unique @default(uuid())
-  //falta dar o prisma generate e dar upload no banco
-  isOnline Boolean
+  isOnline Boolean    @default(false)
 
 
-  sentFriendRequests     Friends[] @relation("SentRequests")
-  receivedFriendRequests Friends[] @relation("ReceivedRequests")
+  sentFriendRequests     FriendsStatus[] @relation("SentRequests")
+  receivedFriendRequests FriendsStatus[] @relation("ReceivedRequests")
 }
 
 model FriendsStatus {
-  id             Int              @id @default(autoincrement())
-  requester      User             @relation("SentRequests", fields: [idFirstPlayer], references: [id])
-  receiver       User             @relation("ReceivedRequests", fields: [idSecondPlayer], references: [id])
-  idFirstPlayer  Int
-  idSecondPlayer Int
-  status         FriendshipStatus @default(PENDING)
-  createdAt      DateTime         @default(now())
+  id           Int    @id @default(autoincrement())
+  requesterId  String
+  receiverId   String
+  requester    User   @relation("SentRequests", fields: [requesterId], references: [code])
+  receiver     User   @relation("ReceivedRequests", fields: [receiverId], references: [code])
+  status       FriendshipStatus @default(PENDING)
+  createdAt    DateTime         @default(now())
+
+  @@unique([requesterId, receiverId])
 }
+
 model ChatInfos {
-  id             Int              @id @default(autoincrement())
-  participants   ChatParticipants[]
-  messages       ChatTalks[]
+  id           String           @id @default(uuid()) // ID do chat agora é UUID
+  participants ChatParticipants[]
+  messages     ChatTalks[]
 }
+
 model ChatParticipants {
-  id             Int              @id @default(autoincrement())
-  chatRoomId     Int
-  chatRoom       ChatInfos        @relation(fields: [chatRoomId], references: [id])
-  userId         Int
-  name           String
+  id         Int       @id @default(autoincrement())
+  chatRoomId String
+  chatRoom   ChatInfos @relation(fields: [chatRoomId], references: [id])
+  userId     String    // referencia User.code
+  name       String
 }
+
 model ChatTalks {
-  id             Int              @id @default(autoincrement())
-  conversation   String 
-  authorId       Int
-  chatRoomId     Int
-  chatRoom       ChatInfos        @relation(fields: [chatRoomId], references: [id])
-  createdAt      DateTime         @default(now())
+  id           Int       @id @default(autoincrement())
+  conversation String
+  authorId     String    // referencia User.code
+  chatRoomId   String    // referencia ChatInfos.id
+  chatRoom     ChatInfos @relation(fields: [chatRoomId], references: [id])
+  createdAt    DateTime  @default(now())
 }
 
 enum FriendshipStatus {

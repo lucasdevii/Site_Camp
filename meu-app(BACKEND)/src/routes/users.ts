@@ -4,7 +4,7 @@ import cookieParser from "cookie-parser";
 import bcrypt from "bcryptjs";
 import { App, prisma } from "../App";
 
-const CHAVE_HASH = "HASHJWTDECODE";
+const CHAVE_HASH = process.env.SenhaJWT as string;
 
 App.post("/SignUp", async (req, res) => {
   const token = req.cookies.token;
